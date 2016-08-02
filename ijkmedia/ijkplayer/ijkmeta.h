@@ -91,5 +91,4 @@ size_t        ijkmeta_get_children_count_l(IjkMediaMeta *meta);
 // do not free
 IjkMediaMeta *ijkmeta_get_child_l(IjkMediaMeta *meta, size_t index);
 
-
 #endif//IJKPLAYER__IJKMETA_H

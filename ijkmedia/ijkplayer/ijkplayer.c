@@ -263,10 +263,10 @@ IjkMediaMeta *ijkmp_get_meta_l(IjkMediaPlayer *mp)
     MPTRACE("%s\n", __func__);
     IjkMediaMeta *ret = ffp_get_meta_l(mp->ffplayer);
     MPTRACE("%s()=void\n", __func__);
-	
     return ret;
 }
 
+// get pid cid
 const char *ijkmp_get_metadata(IjkMediaPlayer *mp, const char* name)
 {
 	assert(mp);
