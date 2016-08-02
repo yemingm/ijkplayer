@@ -70,9 +70,9 @@
  * NEXT:  buffering for the second time after START
  * MAX:   ...
  */
-#define DEFAULT_FIRST_HIGH_WATER_MARK_IN_MS     (100)
-#define DEFAULT_NEXT_HIGH_WATER_MARK_IN_MS      (1 * 1000)
-#define DEFAULT_LAST_HIGH_WATER_MARK_IN_MS      (5 * 1000)
+#define DEFAULT_FIRST_HIGH_WATER_MARK_IN_MS     (0)
+#define DEFAULT_NEXT_HIGH_WATER_MARK_IN_MS      (0)
+#define DEFAULT_LAST_HIGH_WATER_MARK_IN_MS      (0)
 
 #define BUFFERING_CHECK_PER_BYTES               (512)
 #define BUFFERING_CHECK_PER_MILLISECONDS        (500)
@@ -81,7 +81,7 @@
 #ifdef FFP_MERGE
 #define MIN_FRAMES 25
 #endif
-#define DEFAULT_MIN_FRAMES  50000
+#define DEFAULT_MIN_FRAMES  5
 #define MIN_MIN_FRAMES      5
 #define MAX_MIN_FRAMES      50000
 #define MIN_FRAMES (ffp->dcc.min_frames)
