@@ -2471,6 +2471,7 @@ static int read_thread(void *arg)
 
     opts = setup_find_stream_info_opts(ic, ffp->codec_opts);
     orig_nb_streams = ic->nb_streams;
+	ic->probesize = 4096;
 
     err = avformat_find_stream_info(ic, opts);
 
