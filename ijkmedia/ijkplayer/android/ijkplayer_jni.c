@@ -36,7 +36,7 @@
 #include "ijkplayer_android.h"
 #include "ijksdl/android/ijksdl_android_jni.h"
 #include "ijksdl/android/ijksdl_codec_android_mediadef.h"
-#include "libavformat/ijkavformat.h"
+#include "ijkplayer/ijkavformat/ijkavformat.h"
 
 #define JNI_MODULE_PACKAGE      "tv/danmaku/ijk/media/player"
 #define JNI_CLASS_IJKPLAYER     "tv/danmaku/ijk/media/player/IjkMediaPlayer"
@@ -608,7 +608,7 @@ IjkMediaPlayer_getMediaMeta(JNIEnv *env, jobject thiz)
         goto LABEL_RETURN;
 
     ijkmeta_lock(meta);
-    is_locked = true;
+	is_locked = true;
 
     jlocal_bundle = J4AC_Bundle__Bundle(env);
     if (J4A_ExceptionCheck__throwAny(env)) {
@@ -686,6 +686,33 @@ LABEL_RETURN:
     return jret_bundle;
 }
 
+static jobject
+IjkMediaPlayer_getMetaData(JNIEnv *env, jobject thiz)
+{
+	MPTRACE("%s\n", __func__);
+	jobject jret_bundle = NULL;
+    jobject jlocal_bundle = NULL;
+	IjkMediaPlayer *mp = jni_get_media_player(env, thiz);
+    JNI_CHECK_GOTO(mp, env, "java/lang/IllegalStateException", "mpjni: getMetaData: null mp", LABEL_RETURN);
+
+	jlocal_bundle = J4AC_Bundle__Bundle(env);
+	if (J4A_ExceptionCheck__throwAny(env)) {
+		goto LABEL_RETURN;
+	}
+
+	J4AC_Bundle__putString__withCString__catchAll(env, jlocal_bundle, IJKM_KEY_SERVER_PID, ijkmp_get_metadata(mp, IJKM_KEY_SERVER_PID));
+	J4AC_Bundle__putString__withCString__catchAll(env, jlocal_bundle, IJKM_KEY_SERVER_CID, ijkmp_get_metadata(mp, IJKM_KEY_SERVER_CID));
+	J4AC_Bundle__putString__withCString__catchAll(env, jlocal_bundle, IJKM_KEY_SERVER_IP, ijkmp_get_metadata(mp, IJKM_KEY_SERVER_IP));
+
+	jret_bundle = jlocal_bundle;
+	jlocal_bundle = NULL;
+	
+LABEL_RETURN:
+    SDL_JNI_DeleteLocalRefP(env, &jlocal_bundle);
+    ijkmp_dec_ref_p(&mp);
+	return jret_bundle;
+}
+
 static void
 IjkMediaPlayer_native_init(JNIEnv *env)
 {
@@ -702,7 +729,7 @@ IjkMediaPlayer_native_setup(JNIEnv *env, jobject thiz, jobject weak_this)
     jni_set_media_player(env, thiz, mp);
     ijkmp_set_weak_thiz(mp, (*env)->NewGlobalRef(env, weak_this));
     ijkmp_set_inject_opaque(mp, ijkmp_get_weak_thiz(mp));
-    ijkmp_android_set_mediacodec_select_callback(mp, mediacodec_select_callback, ijkmp_get_weak_thiz(mp));
+    ijkmp_android_set_mediacodec_select_callback(mp, mediacodec_select_callback, (*env)->NewGlobalRef(env, weak_this));
 
 LABEL_RETURN:
     ijkmp_dec_ref_p(&mp);
@@ -1008,6 +1035,7 @@ static JNINativeMethod g_methods[] = {
     { "native_profileEnd",      "()V",                      (void *) IjkMediaPlayer_native_profileEnd },
 
     { "native_setLogLevel",     "(I)V",                     (void *) IjkMediaPlayer_native_setLogLevel },
+    { "_getMetaData",			"()Landroid/os/Bundle;",    (void *) IjkMediaPlayer_getMetaData},
 };
 
 JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved)

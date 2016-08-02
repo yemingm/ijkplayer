@@ -112,5 +112,7 @@ void      ffp_set_property_int64(FFPlayer *ffp, int id, int64_t value);
 
 // must be freed with free();
 struct IjkMediaMeta *ffp_get_meta_l(FFPlayer *ffp);
+const char *ffp_get_metadata(FFPlayer *ffp, const char *name);
+
 
 #endif

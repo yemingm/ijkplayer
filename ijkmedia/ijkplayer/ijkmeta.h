@@ -34,6 +34,11 @@
 #define IJKM_KEY_VIDEO_STREAM   "video"
 #define IJKM_KEY_AUDIO_STREAM   "audio"
 
+// pid cid
+#define IJKM_KEY_SERVER_PID		"srs_pid"
+#define IJKM_KEY_SERVER_CID     "srs_id"
+#define IJKM_KEY_SERVER_IP		"srs_server_ip"
+
 // stream meta
 #define IJKM_KEY_TYPE           "type"
 #define IJKM_VAL_TYPE__VIDEO    "video"
@@ -85,5 +90,6 @@ int64_t       ijkmeta_get_int64_l(IjkMediaMeta *meta, const char *name, int64_t 
 size_t        ijkmeta_get_children_count_l(IjkMediaMeta *meta);
 // do not free
 IjkMediaMeta *ijkmeta_get_child_l(IjkMediaMeta *meta, size_t index);
+
 
 #endif//IJKPLAYER__IJKMETA_H
